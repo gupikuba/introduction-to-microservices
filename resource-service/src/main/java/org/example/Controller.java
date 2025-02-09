@@ -3,7 +3,6 @@ package org.example;
 import org.apache.tika.exception.TikaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,6 +36,7 @@ public class Controller {
         } catch (SAXException e) {
             throw new RuntimeException(e);
         }
+
         return new ResponseEntity<>(mp3Repository.save(new MP3(mp3)).getId(), HttpStatus.OK);
     }
 
@@ -45,7 +46,7 @@ public class Controller {
     }
 
     @DeleteMapping("/resources")
-    ResponseEntity<String> delete(@RequestParam("id")String idsString) {
+    ResponseEntity<?> delete(@RequestParam("id")String idsString) {
         if (idsString.length() >= 200) {
             return new ResponseEntity<>("CSV string format is invalid or exceeds length restrictions.",
                     HttpStatus.BAD_REQUEST);
@@ -57,8 +58,15 @@ public class Controller {
             return new ResponseEntity<>("CSV string format is invalid or exceeds length restrictions.",
                     HttpStatus.BAD_REQUEST);
         }
-        mp3Repository.deleteAllById(ids);
-        return new ResponseEntity<>(idsString, HttpStatus.OK);
+        List<Integer> deleted = new ArrayList<>();
+        for(Integer id : ids) {
+            int count = mp3Repository.customDeleteById(id);
+            if(count > 0) {
+                deleted.add(id);
+            }
+        }
+
+        return new ResponseEntity<>(deleted, HttpStatus.OK);
     }
 
 }

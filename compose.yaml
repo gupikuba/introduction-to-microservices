@@ -1,8 +1,15 @@
 services:
-  postgresql:
+  postgresql-resource-service:
     image: 'postgres:13.1-alpine'
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
     ports:
       - '5432:5432'
+  postgresql-song-service:
+    image: 'postgres:13.1-alpine'
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5433:5432'

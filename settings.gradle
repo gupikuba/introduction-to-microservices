@@ -1,2 +1,2 @@
-rootProject.name = 'microservices-task1'
-
+include 'resource-service'
+include 'song-service'
