@@ -1,7 +1,6 @@
 package org.example;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController()
 @RequestMapping("songs")
@@ -17,9 +17,9 @@ public class SongController {
     SongRepository songRepository;
 
     @PostMapping()
-    ResponseEntity<?> saveSong(@RequestBody Song song) {
+    ResponseEntity<Map<String, Integer>> saveSong(@RequestBody Song song) {
         Song saved = songRepository.save(song);
-        return ResponseEntity.ok(saved.getMetadataId());
+        return ResponseEntity.ok(Map.of("id",saved.getId()));
     }
 
     @GetMapping("/{id}")
@@ -45,6 +45,6 @@ public class SongController {
             }
         }
 
-        return new ResponseEntity<>(deleted, HttpStatus.OK);
+        return new ResponseEntity<>(Map.of("ids",deleted), HttpStatus.OK);
     }
 }

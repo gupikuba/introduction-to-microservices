@@ -13,14 +13,11 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class MP3 {
-    public MP3(byte[] mp3) {
-        this.mp3 = mp3;
-    }
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
     @Lob()

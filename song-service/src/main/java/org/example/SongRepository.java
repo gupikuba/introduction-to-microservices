@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface SongRepository extends CrudRepository<Song, Integer> {
     @Transactional
     @Modifying
-    @Query("DELETE FROM Song s WHERE s.metadataId = ?1")
+    @Query("DELETE FROM Song s WHERE s.id = ?1")
     int customDeleteById(Integer id);
 }

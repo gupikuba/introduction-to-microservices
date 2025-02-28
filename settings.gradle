@@ -1,2 +1,5 @@
 include 'resource-service'
 include 'song-service'
+include 'song-service:src:main:test'
+findProject(':song-service:src:main:test')?.name = 'test'
+

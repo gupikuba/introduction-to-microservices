@@ -17,9 +17,7 @@ import lombok.Setter;
 public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer metadataId;
-    @JsonProperty("id")
-    Integer resourceId;
+    Integer id;
     @NotNull
     @Size(min = 1, max = 100)
     String name;
