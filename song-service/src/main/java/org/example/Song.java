@@ -18,20 +18,20 @@ public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    @NotNull
-    @Size(min = 1, max = 100)
+    @NotNull()
+    @Size(min = 1, max = 100, message = "must be 1-100 characters text")
     String name;
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 100, message = "must be 1-100 characters text")
     String artist;
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 100, message = "must be 1-100 characters text")
     String album;
     @NotNull
-    @Pattern(regexp = "\\d{2}:\\d{2}")
+    @Pattern(regexp = "\\d{2}:[0-5]\\d", message = "must be in format mm:ss, with leading zeros.")
     String duration;
     @NotNull
-    @Min(1900)
-    @Max(2099)
-    Integer year;
+    @Pattern(regexp = "(19|20)\\d{2}", message = "must be in YYYY format between 1900-2099")
+//    @Max(value = 2099, message = "must be in YYYY format between 1900-2099")
+    String year;
 }

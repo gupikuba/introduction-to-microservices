@@ -1,12 +1,12 @@
-package org.example;
+package org.example.service;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.mp3.Mp3Parser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.example.dto.SongDTO;
+import org.example.service.validate.ResourceServiceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
@@ -14,9 +14,6 @@ import org.xml.sax.SAXException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Service
 public class MetadataService {
@@ -29,8 +26,10 @@ public class MetadataService {
     private final Metadata metadata = new Metadata();
     private final ParseContext pcontext = new ParseContext();
     private final Mp3Parser Mp3Parser = new  Mp3Parser();
+
     @Autowired
-    private Validator validator;
+    ResourceServiceValidator validator;
+
     public SongDTO parseSongDTO(byte[] mp3) throws IOException, TikaException, SAXException {
         InputStream inputstream = new ByteArrayInputStream(mp3);
         Mp3Parser.parse(inputstream, handler, metadata, pcontext);
@@ -41,19 +40,8 @@ public class MetadataService {
                 .year(metadata.get(YEAR).isBlank() ? null : Integer.parseInt(metadata.get(YEAR)))
                 .duration(parseDuration((metadata.get(DURATION))))
                 .build();
-        validate(songDTO);
+        validator.validateSong(songDTO);
         return songDTO;
-    }
-
-    private void validate(SongDTO songDTO) {
-        Set<ConstraintViolation<SongDTO>> validation = validator.validate(songDTO);
-        if (!validation.isEmpty()) {
-            Map<String, String> details = new HashMap<>();
-            for (var v : validation) {
-                details.put(v.getPropertyPath().toString(), v.getMessage());
-            }
-            throw new ValidationErrorResponse(details);
-        }
     }
 
     private String parseDuration(String duration) {

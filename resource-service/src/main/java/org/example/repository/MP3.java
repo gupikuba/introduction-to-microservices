@@ -1,4 +1,4 @@
-package org.example;
+package org.example.repository;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +18,7 @@ import lombok.Setter;
 public class MP3 {
 
     @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Lob()

@@ -1,8 +1,12 @@
 package org.example;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,38 +17,26 @@ import java.util.Map;
 @RestController()
 @RequestMapping("songs")
 @AllArgsConstructor
+@Validated
 public class SongController {
-    SongRepository songRepository;
+    SongService songService;
 
     @PostMapping()
-    ResponseEntity<Map<String, Integer>> saveSong(@RequestBody Song song) {
-        Song saved = songRepository.save(song);
-        return ResponseEntity.ok(Map.of("id",saved.getId()));
+    ResponseEntity<Map<String, Integer>> saveSong(@RequestBody @Valid Song song) {
+        songService.save(song);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Map.of("id",song.getId()));
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<?> getSong(@PathVariable Integer id) {
-        Song song = songRepository.findById(id).get();
-        return ResponseEntity.ok(song);
+    ResponseEntity<?> getSong(@PathVariable @Min(1) Integer id) {
+        return ResponseEntity.ok(songService.findById(id));
     }
 
     @DeleteMapping()
     ResponseEntity<?> delete(@RequestParam("id")String idsString) {
-        List<Integer> ids;
-        try {
-            ids = Arrays.stream(idsString.split(",")).map(Integer::parseInt).toList();
-        }catch (NumberFormatException e){
-            return new ResponseEntity<>("CSV string format is invalid or exceeds length restrictions.",
-                    HttpStatus.BAD_REQUEST);
-        }
-        List<Integer> deleted = new ArrayList<>();
-        for(Integer id : ids) {
-            int count = songRepository.customDeleteById(id);
-            if(count > 0) {
-                deleted.add(id);
-            }
-        }
-
+        List<Integer> deleted = songService.deleteByIds(idsString);
         return new ResponseEntity<>(Map.of("ids",deleted), HttpStatus.OK);
     }
 }
