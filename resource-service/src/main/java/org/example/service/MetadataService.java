@@ -28,7 +28,7 @@ public class MetadataService {
     private final Mp3Parser Mp3Parser = new  Mp3Parser();
 
     @Autowired
-    ResourceServiceValidator validator;
+    private ResourceServiceValidator validator;
 
     public SongDTO parseSongDTO(byte[] mp3) throws IOException, TikaException, SAXException {
         InputStream inputstream = new ByteArrayInputStream(mp3);

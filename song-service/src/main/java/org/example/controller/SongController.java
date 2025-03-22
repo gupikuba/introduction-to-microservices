@@ -19,7 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Validated
 public class SongController {
-    SongService songService;
+    private final SongService songService;
 
     @PostMapping()
     ResponseEntity<Map<String, Integer>> saveSong(@RequestBody @Valid Song song) {

@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
 import org.apache.tika.exception.TikaException;
 import org.example.repository.MP3;
 import org.example.service.MP3Service;
@@ -22,11 +23,11 @@ import java.io.IOException;
 import java.util.*;
 
 @RestController
+@AllArgsConstructor
 public class ResourceServiceController {
-    @Autowired
-    MP3Service mp3Service;
-    @Autowired
-    SongRestService songRestService;
+    private final MP3Service mp3Service;
+    private final SongRestService songRestService;
+
     @PostMapping(value = "/resources", consumes = "audio/mpeg")
     ResponseEntity<Map<String, Integer>> createMp3(@RequestBody byte[]mp3) throws IOException, TikaException, SAXException{
         Map<String, Integer> songServiceResponse = songRestService.postToSongService(mp3);

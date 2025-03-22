@@ -32,6 +32,5 @@ public class Song {
     String duration;
     @NotNull
     @Pattern(regexp = "(19|20)\\d{2}", message = "Year must be in YYYY format between 1900 and 2099")
-//    @Max(value = 2099, message = "must be in YYYY format between 1900-2099")
     String year;
 }

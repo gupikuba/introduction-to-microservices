@@ -11,7 +11,7 @@ import java.util.Map;
 public class ValidationErrorResponse {
     private final String errorMessage = "Validation error";
     private final int errorCode = 400;
-    private Map<String, String> details = new HashMap<>();
+    private final Map<String, String> details = new HashMap<>();
 
     public void addDetail(String field, String message) {
         details.put(field, message);

@@ -12,8 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class MP3Service {
-    @Autowired
-    private Mp3Repository mp3Repository;
+    private final Mp3Repository mp3Repository;
 
     public MP3 findById(Integer id) {
         return mp3Repository.findById(id)

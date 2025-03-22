@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class SongService {
-    private SongRepository songRepository;
+    private final SongRepository songRepository;
 
     public void save(Song song) {
         if (song.getId() != null && songRepository.existsById(song.getId())) {

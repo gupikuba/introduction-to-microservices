@@ -18,7 +18,6 @@ import lombok.Setter;
 public class MP3 {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Lob()
