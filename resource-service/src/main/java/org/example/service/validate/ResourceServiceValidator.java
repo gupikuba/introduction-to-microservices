@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 import org.example.dto.SongDTO;
+import org.example.exception.InvalidCSVException;
 import org.example.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,8 +27,19 @@ public class ResourceServiceValidator {
             throw new ValidationException(details);
         }
     }
+    public void validateCsv(String csv) {
+        if (csv.length() >= 200) {
+            throw new InvalidCSVException(String.format("CSV string is too long: received %d characters, maximum allowed is 200", csv.length()));
+        }
 
-    public boolean areIdsForDeletionValid(String idsString) {
-        return idsString.length() < 200 && idsString.matches("(\\d+,)*\\d+");
+        String[] ids = csv.split(",");
+
+        for(String id : ids) {
+            try {
+                Integer.parseInt(id);
+            } catch (NumberFormatException e) {
+                throw new InvalidCSVException(String.format("Invalid ID format: %s. Only positive integers are allowed", id));
+            }
+        }
     }
 }

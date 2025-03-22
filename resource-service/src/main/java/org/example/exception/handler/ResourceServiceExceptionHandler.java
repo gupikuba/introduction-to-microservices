@@ -7,6 +7,7 @@ import org.example.exception.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -28,9 +29,19 @@ public class ResourceServiceExceptionHandler {
                 .body("An error occurred on the server.");
     }
 
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ErrorMessageDTO> notSupported(HttpMediaTypeNotSupportedException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessageDTO(
+                        String.format("Invalid file format %s. Only MP3 files are allowed", e.getContentType()),
+                        HttpStatus.BAD_REQUEST.value()));
+    }
+
+
     @ExceptionHandler(value = {HandlerMethodValidationException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ErrorMessageDTO> badRequest(Exception exception) {
-        String message = String.format("Provided Id=%s is invalid",
+        String message = String.format("Provided Id=%s is invalid. Must be a positive integer.",
                 exception instanceof HandlerMethodValidationException ?
                         ((HandlerMethodValidationException) exception).getParameterValidationResults()
                                 .get(0).getArgument()

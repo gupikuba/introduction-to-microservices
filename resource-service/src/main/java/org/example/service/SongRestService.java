@@ -44,20 +44,20 @@ public class SongRestService {
     }
 
     public Map<String, List<Integer>> delete(String idsString) {
-        if (!validator.areIdsForDeletionValid(idsString)) {
-            throw new InvalidCSVException(idsString, HttpStatus.BAD_REQUEST.value());
-        } else {
-            RestClient restClient = RestClient.create();
-            return restClient.delete()
-                    .uri("http://localhost:8081/songs?id={ids}", idsString)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .exchange((req, resp) -> {
-                        if (resp.getStatusCode().equals(HttpStatus.OK)) {
-                            return resp.bodyTo(new ParameterizedTypeReference<>() {});
-                        } else {
-                            throw new RuntimeException();
-                        }
-                    });
-        }
+        validator.validateCsv(idsString);
+
+        RestClient restClient = RestClient.create();
+        return restClient.delete()
+                .uri("http://localhost:8081/songs?id={ids}", idsString)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange((req, resp) -> {
+                    if (resp.getStatusCode().equals(HttpStatus.OK)) {
+                        return resp.bodyTo(new ParameterizedTypeReference<>() {
+                        });
+                    } else {
+                        throw new RuntimeException();
+                    }
+                });
+
     }
 }

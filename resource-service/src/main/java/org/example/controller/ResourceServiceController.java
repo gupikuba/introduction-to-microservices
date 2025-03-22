@@ -27,7 +27,7 @@ public class ResourceServiceController {
     MP3Service mp3Service;
     @Autowired
     SongRestService songRestService;
-    @PostMapping("/resources")
+    @PostMapping(value = "/resources", consumes = "audio/mpeg")
     ResponseEntity<Map<String, Integer>> createMp3(@RequestBody byte[]mp3) throws IOException, TikaException, SAXException{
         Map<String, Integer> songServiceResponse = songRestService.postToSongService(mp3);
         return new ResponseEntity<>(songServiceResponse, HttpStatus.OK);

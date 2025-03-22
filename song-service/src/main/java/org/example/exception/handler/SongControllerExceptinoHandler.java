@@ -1,6 +1,11 @@
-package org.example;
+package org.example.exception.handler;
 
 import jakarta.validation.ConstraintViolationException;
+import org.example.exception.SongNotFoundException;
+import org.example.exception.ValidationErrorResponse;
+import org.example.dto.ErrorMessageDTO;
+import org.example.exception.InvalidCSVException;
+import org.example.exception.MetadataAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +22,7 @@ public class SongControllerExceptinoHandler {
     public ResponseEntity<ValidationErrorResponse> handle(MethodArgumentNotValidException exception) {
         ValidationErrorResponse response = new ValidationErrorResponse();
         for (FieldError error : exception.getFieldErrors()) {
-            response.addDetail(error.getField(), error.getDefaultMessage());
+            response.addDetail(error.getField(), String.format("%s %s",error.getField(), error.getDefaultMessage()));
         }
         return ResponseEntity.badRequest().body(response);
     }

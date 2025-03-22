@@ -28,10 +28,10 @@ public class Song {
     @Size(min = 1, max = 100, message = "must be 1-100 characters text")
     String album;
     @NotNull
-    @Pattern(regexp = "\\d{2}:[0-5]\\d", message = "must be in format mm:ss, with leading zeros.")
+    @Pattern(regexp = "\\d{2}:[0-5]\\d", message = "Duration must be in format mm:ss with leading zeros.")
     String duration;
     @NotNull
-    @Pattern(regexp = "(19|20)\\d{2}", message = "must be in YYYY format between 1900-2099")
+    @Pattern(regexp = "(19|20)\\d{2}", message = "Year must be in YYYY format between 1900 and 2099")
 //    @Max(value = 2099, message = "must be in YYYY format between 1900-2099")
     String year;
 }
