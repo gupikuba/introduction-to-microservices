@@ -37,7 +37,7 @@ public class MetadataService {
                 .name(metadata.get(NAME))
                 .album(metadata.get(ALBUM))
                 .artist(metadata.get(ARTIST))
-                .year(metadata.get(YEAR).isBlank() ? null : Integer.parseInt(metadata.get(YEAR)))
+                .year(metadata.get(YEAR))
                 .duration(parseDuration((metadata.get(DURATION))))
                 .build();
         validator.validateSong(songDTO);

@@ -36,7 +36,7 @@ public class SongController {
     }
 
     @DeleteMapping()
-    ResponseEntity<?> delete(@RequestParam("id")String idsString) {
+    ResponseEntity<Map<String, List<Integer>>> delete(@RequestParam("id")String idsString) {
         List<Integer> deleted = songService.deleteByIds(idsString);
         return new ResponseEntity<>(Map.of("ids",deleted), HttpStatus.OK);
     }
