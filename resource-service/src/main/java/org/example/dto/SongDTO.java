@@ -18,5 +18,5 @@ public class SongDTO {
     @Size(min = 1, message = "must be present")
     String duration;
     @NotNull(message = "must be present")
-    Integer year;
+    String year;
 }

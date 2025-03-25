@@ -2,6 +2,7 @@ package org.example.service;
 
 import lombok.AllArgsConstructor;
 import org.example.Song;
+import org.example.dto.SongDTO;
 import org.example.repository.SongRepository;
 import org.example.exception.InvalidCSVException;
 import org.example.exception.MetadataAlreadyExistsException;
@@ -18,11 +19,26 @@ import java.util.stream.Collectors;
 public class SongService {
     private final SongRepository songRepository;
 
-    public void save(Song song) {
+    public Song save(SongDTO songDTO) {
+        return save(convertToSongEntity(songDTO));
+    }
+
+    private Song convertToSongEntity(SongDTO songDTO) {
+        return Song.builder()
+                .id(songDTO.getId())
+                .album(songDTO.getAlbum())
+                .name(songDTO.getName())
+                .year(songDTO.getYear())
+                .artist(songDTO.getArtist())
+                .duration(songDTO.getDuration())
+                .build();
+    }
+
+    private Song save(Song song) {
         if (song.getId() != null && songRepository.existsById(song.getId())) {
             throw new MetadataAlreadyExistsException(song.getId());
         }
-         songRepository.save(song);
+         return songRepository.save(song);
     }
 
     public Song findById(Integer id) {
@@ -64,4 +80,14 @@ public class SongService {
                 .collect(Collectors.toList());
     }
 
+    public SongDTO convertToSongDTO(Song song) {
+        return SongDTO.builder()
+                .id(song.getId())
+                .album(song.getAlbum())
+                .artist(song.getArtist())
+                .year(song.getYear())
+                .duration(song.getDuration())
+                .name(song.getName())
+                .build();
+    }
 }
